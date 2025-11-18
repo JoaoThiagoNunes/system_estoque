@@ -1,24 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../include/system.h"
+#include "../include/utils.h"
 
 static void mostrar_menu(void) {
     printf("\n=== Sistema de Estoque ===\n");
-    printf("1 - Cadastrar categoria\n");
-    printf("2 - Cadastrar fornecedor\n");
-    printf("3 - Cadastrar produto\n");
-    printf("4 - Cadastrar cliente\n");
-    printf("5 - Cadastrar funcionário\n");
-    printf("6 - Listar categorias\n");
-    printf("7 - Listar fornecedores\n");
-    printf("8 - Listar produtos\n");
-    printf("9 - Listar clientes\n");
-    printf("10 - Listar funcionários\n");
+    printf("01 - Cadastrar categoria\n");
+    printf("02 - Cadastrar fornecedor\n");
+    printf("03 - Cadastrar produto\n");
+    printf("04 - Cadastrar cliente\n");
+    printf("05 - Cadastrar funcionario\n\n");
+    printf("06 - Listar categorias\n");
+    printf("07 - Listar fornecedores\n");
+    printf("08 - Listar produtos\n");
+    printf("09 - Listar clientes\n");
+    printf("10 - Listar funcionarios\n\n");
     printf("11 - Registrar entrada em estoque\n");
-    printf("12 - Registrar saída em estoque\n");
-    printf("13 - Registrar venda\n");
-    printf("0 - Sair\n");
+    printf("12 - Registrar saida em estoque\n");
+    printf("13 - Registrar venda\n\n");
+    printf(" 0 - Sair\n");
     printf("Escolha: ");
 }
 
@@ -29,9 +29,10 @@ int main(void) {
     while (opcao != 0) {
         mostrar_menu();
         if (scanf("%d", &opcao) != 1) {
-            fprintf(stderr, "Entrada inválida. Encerrando.\n");
+            fprintf(stderr, "Entrada invalida. Encerrando.\n");
             return EXIT_FAILURE;
         }
+        limpar_buffer();
 
         switch (opcao) {
             case 1:
@@ -68,8 +69,10 @@ int main(void) {
                 int id, qtd;
                 printf("ID do produto: ");
                 scanf("%d", &id);
+                limpar_buffer();
                 printf("Quantidade: ");
                 scanf("%d", &qtd);
+                limpar_buffer();
                 registrar_entrada(id, qtd);
                 break;
             }
@@ -78,10 +81,13 @@ int main(void) {
                 char motivo[60];
                 printf("ID do produto: ");
                 scanf("%d", &id);
+                limpar_buffer();
                 printf("Quantidade: ");
                 scanf("%d", &qtd);
+                limpar_buffer();
                 printf("Motivo: ");
                 scanf(" %59[^\n]", motivo);
+                limpar_buffer();
                 registrar_saida(id, qtd, motivo);
                 break;
             }
@@ -89,12 +95,16 @@ int main(void) {
                 int produtoId, clienteId, funcionarioId, qtd;
                 printf("ID do produto: ");
                 scanf("%d", &produtoId);
+                limpar_buffer();
                 printf("ID do cliente: ");
                 scanf("%d", &clienteId);
-                printf("ID do funcionário responsável: ");
+                limpar_buffer();
+                printf("ID do funcionario responsavel: ");
                 scanf("%d", &funcionarioId);
+                limpar_buffer();
                 printf("Quantidade: ");
                 scanf("%d", &qtd);
+                limpar_buffer();
                 registrar_venda(produtoId, clienteId, funcionarioId, qtd);
                 break;
             }
@@ -102,7 +112,7 @@ int main(void) {
                 printf("Saindo...\n");
                 break;
             default:
-                printf("Opção inválida.\n");
+                printf("Opção invalida.\n");
                 break;
         }
     }

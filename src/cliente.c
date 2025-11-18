@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -66,7 +65,7 @@ void cadastrar_cliente(void) {
 
     ler_texto("Nome do cliente: ", cliente.nome, sizeof(cliente.nome));
     ler_texto("Telefone: ", cliente.telefone, sizeof(cliente.telefone));
-    ler_texto("Rua: ", cliente.endereco.rua, sizeof(cliente.endereco.rua));
+    ler_texto("Endereco: ", cliente.endereco.rua, sizeof(cliente.endereco.rua));
     ler_texto("Cidade: ", cliente.endereco.cidade, sizeof(cliente.endereco.cidade));
     ler_texto("Estado (UF): ", cliente.endereco.estado, sizeof(cliente.endereco.estado));
     ler_texto("CEP: ", cliente.endereco.cep, sizeof(cliente.endereco.cep));
@@ -94,11 +93,13 @@ void listar_clientes(void) {
 
     ClienteNode *ponteiro = clientesHead;
     while (ponteiro) {
-        printf("ID: %d | Nome: %s | Telefone: %s | Cidade: %s\n",
+        printf("ID: %d | Nome: %s | Telefone: %s | Cidade: %s | Estado: %s | CEP: %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.telefone,
-               ponteiro->value.endereco.cidade);
+               ponteiro->value.endereco.cidade,
+               ponteiro->value.endereco.estado,
+               ponteiro->value.endereco.cep);
         ponteiro = ponteiro->next;
     }
 }

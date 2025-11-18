@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-
 #include "../include/utils.h"
 
 void limpar_buffer(void) {

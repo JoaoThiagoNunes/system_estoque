@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -60,14 +59,12 @@ void cadastrar_funcionario(void) {
     Funcionario funcionario = {0};
     funcionario.id = proximoFuncionarioId++;
 
-    ler_texto("Nome do funcionário: ", funcionario.nome, sizeof(funcionario.nome));
+    ler_texto("Nome do funcionario: ", funcionario.nome, sizeof(funcionario.nome));
     ler_texto("Cargo: ", funcionario.cargo, sizeof(funcionario.cargo));
-    ler_texto("Login: ", funcionario.login, sizeof(funcionario.login));
-    ler_texto("Senha: ", funcionario.senha, sizeof(funcionario.senha));
 
     FuncionarioNode *novo = malloc(sizeof(*novo));
     if (!novo) {
-        fprintf(stderr, "Falha ao alocar memória para funcionário.\n");
+        fprintf(stderr, "Falha ao alocar memoria para funcionario.\n");
         return;
     }
 
@@ -76,13 +73,13 @@ void cadastrar_funcionario(void) {
 
     inserir_funcionario(novo);
 
-    printf("Funcionário cadastrado com ID %d.\n", funcionario.id);
+    printf("Funcionario cadastrado com ID %d.\n", funcionario.id);
 }
 
 void listar_funcionarios(void) {
-    printf("\n=== Funcionários ===\n");
+    printf("\n=== Funcionarios ===\n");
     if (!funcionariosHead) {
-        printf("Nenhum funcionário cadastrado.\n");
+        printf("Nenhum funcionario cadastrado.\n");
         return;
     }
 

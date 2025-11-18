@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -78,54 +77,55 @@ void cadastrar_produto(void) {
 
     printf("ID da categoria: ");
     if (scanf("%d", &produto.categoriaId) != 1) {
-        printf("Entrada inválida. Produto não cadastrado.\n");
+        printf("Entrada invalida. Produto nao cadastrado.\n");
         limpar_buffer();
         return;
     }
+    limpar_buffer();
     if (!categorias_buscar_por_id(produto.categoriaId)) {
-        printf("Categoria %d não encontrada.\n", produto.categoriaId);
-        limpar_buffer();
+        printf("Categoria %d nao encontrada.\n", produto.categoriaId);
         return;
     }
 
     printf("ID do fornecedor: ");
     if (scanf("%d", &produto.fornecedorId) != 1) {
-        printf("Entrada inválida. Produto não cadastrado.\n");
+        printf("Entrada invalida. Produto nao cadastrado.\n");
         limpar_buffer();
         return;
     }
+    limpar_buffer();
     if (!fornecedores_buscar_por_id(produto.fornecedorId)) {
-        printf("Fornecedor %d não encontrado.\n", produto.fornecedorId);
-        limpar_buffer();
+        printf("Fornecedor %d nao encontrado.\n", produto.fornecedorId);
         return;
     }
 
-    printf("Preço de compra: ");
+    printf("Preco de compra: ");
     if (scanf("%f", &produto.precoCompra) != 1) {
-        printf("Entrada inválida. Produto não cadastrado.\n");
+        printf("Entrada invalida. Produto nao cadastrado.\n");
         limpar_buffer();
         return;
     }
+    limpar_buffer();
 
-    printf("Preço de venda: ");
+    printf("Preco de venda: ");
     if (scanf("%f", &produto.precoVenda) != 1) {
-        printf("Entrada inválida. Produto não cadastrado.\n");
+        printf("Entrada invalida. Produto nao cadastrado.\n");
         limpar_buffer();
         return;
     }
+    limpar_buffer();
 
     printf("Quantidade inicial em estoque: ");
     if (scanf("%d", &produto.quantidade) != 1) {
-        printf("Entrada inválida. Produto não cadastrado.\n");
+        printf("Entrada invalida. Produto nao cadastrado.\n");
         limpar_buffer();
         return;
     }
-
     limpar_buffer();
 
     ProdutoNode *novo = malloc(sizeof(*novo));
     if (!novo) {
-        fprintf(stderr, "Falha ao alocar memória para produto.\n");
+        fprintf(stderr, "Falha ao alocar memoria para produto.\n");
         return;
     }
 
@@ -148,7 +148,7 @@ void listar_produtos(void) {
     while (ponteiro) {
         const Categoria *categoria = categorias_buscar_por_id(ponteiro->value.categoriaId);
         const Fornecedor *fornecedor = fornecedores_buscar_por_id(ponteiro->value.fornecedorId);
-        printf("ID: %d | Nome: %s | Estoque: %d | Preço venda: %.2f | Categoria: %s | Fornecedor: %s\n",
+        printf("ID: %d | Nome: %s | Estoque: %d | Preco venda: %.2f | Categoria: %s | Fornecedor: %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.quantidade,

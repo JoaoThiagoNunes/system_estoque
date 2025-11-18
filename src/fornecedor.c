@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -66,7 +65,7 @@ void cadastrar_fornecedor(void) {
 
     ler_texto("Nome do fornecedor: ", fornecedor.nome, sizeof(fornecedor.nome));
     ler_texto("Telefone: ", fornecedor.telefone, sizeof(fornecedor.telefone));
-    ler_texto("Rua: ", fornecedor.endereco.rua, sizeof(fornecedor.endereco.rua));
+    ler_texto("Endereco: ", fornecedor.endereco.rua, sizeof(fornecedor.endereco.rua));
     ler_texto("Cidade: ", fornecedor.endereco.cidade, sizeof(fornecedor.endereco.cidade));
     ler_texto("Estado (UF): ", fornecedor.endereco.estado, sizeof(fornecedor.endereco.estado));
     ler_texto("CEP: ", fornecedor.endereco.cep, sizeof(fornecedor.endereco.cep));
@@ -94,11 +93,13 @@ void listar_fornecedores(void) {
 
     FornecedorNode *ponteiro = fornecedoresHead;
     while (ponteiro) {
-        printf("ID: %d | Nome: %s | Telefone: %s | Cidade: %s\n",
+        printf("ID: %d | Nome: %s | Telefone: %s | Cidade: %s | Estado: %s | CEP: %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.telefone,
-               ponteiro->value.endereco.cidade);
+               ponteiro->value.endereco.cidade,
+               ponteiro->value.endereco.estado,
+               ponteiro->value.endereco.cep);
         ponteiro = ponteiro->next;
     }
 }

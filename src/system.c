@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #include "../include/system.h"
 
 void inicializar_dados(void) {

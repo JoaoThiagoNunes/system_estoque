@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
 #include "../include/system.h"
 
 typedef struct VendaNode {
@@ -34,7 +33,7 @@ void vendas_finalizar(void) {
 
 void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quantidade) {
     if (quantidade <= 0) {
-        printf("Quantidade inválida para venda.\n");
+        printf("Quantidade invalida para venda.\n");
         return;
     }
 
@@ -43,22 +42,22 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
     const Funcionario *funcionario = funcionarios_buscar_por_id(funcionarioId);
 
     if (!produto) {
-        printf("Produto %d não encontrado.\n", produtoId);
+        printf("Produto %d nao encontrado.\n", produtoId);
         return;
     }
 
     if (!cliente) {
-        printf("Cliente %d não encontrado.\n", clienteId);
+        printf("Cliente %d nao encontrado.\n", clienteId);
         return;
     }
 
     if (!funcionario) {
-        printf("Funcionário %d não encontrado.\n", funcionarioId);
+        printf("Funcionário %d nao encontrado.\n", funcionarioId);
         return;
     }
 
     if (quantidade > produto->quantidade) {
-        printf("Venda não registrada: estoque insuficiente.\n");
+        printf("Venda nao registrada: estoque insuficiente.\n");
         return;
     }
 
@@ -76,7 +75,7 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
 
     VendaNode *novo = malloc(sizeof(*novo));
     if (!novo) {
-        fprintf(stderr, "Falha ao alocar memória para venda.\n");
+        fprintf(stderr, "Falha ao alocar memoria para venda.\n");
         return;
     }
 

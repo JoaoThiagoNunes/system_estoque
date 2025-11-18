@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -65,7 +64,7 @@ void cadastrar_categoria(void) {
     categoria.id = proximaCategoriaId++;
 
     ler_texto("Nome da categoria: ", categoria.nome, sizeof(categoria.nome));
-    ler_texto("Descrição: ", categoria.descricao, sizeof(categoria.descricao));
+    ler_texto("Descricao: ", categoria.descricao, sizeof(categoria.descricao));
 
     CategoriaNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -90,7 +89,7 @@ void listar_categorias(void) {
 
     CategoriaNode *ponteiro = categoriasHead;
     while (ponteiro) {
-        printf("ID: %d | Nome: %s | Descrição: %s\n",
+        printf("ID: %d | Nome: %s | Descricao: %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.descricao);

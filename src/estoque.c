@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -58,13 +57,13 @@ void estoque_finalizar(void) {
 
 void registrar_entrada(int produtoId, int quantidade) {
     if (quantidade <= 0) {
-        printf("Quantidade inválida para entrada.\n");
+        printf("Quantidade invalida para entrada.\n");
         return;
     }
 
     Produto *produto = produtos_buscar_por_id(produtoId);
     if (!produto) {
-        printf("Produto %d não encontrado.\n", produtoId);
+        printf("Produto %d nao encontrado. Cadastre o produto primeiro.\n", produtoId);
         return;
     }
 
@@ -80,7 +79,7 @@ void registrar_entrada(int produtoId, int quantidade) {
 
     EntradaEstoqueNode *novo = malloc(sizeof(*novo));
     if (!novo) {
-        fprintf(stderr, "Falha ao alocar memória para entrada de estoque.\n");
+        fprintf(stderr, "Falha ao alocar memoria para entrada de estoque.\n");
         return;
     }
 
@@ -96,18 +95,18 @@ void registrar_entrada(int produtoId, int quantidade) {
 
 void registrar_saida(int produtoId, int quantidade, const char *motivo) {
     if (quantidade <= 0) {
-        printf("Quantidade inválida para saída.\n");
+        printf("Quantidade invalida para saida.\n");
         return;
     }
 
     Produto *produto = produtos_buscar_por_id(produtoId);
     if (!produto) {
-        printf("Produto %d não encontrado.\n", produtoId);
+        printf("Produto %d nao encontrado.\n", produtoId);
         return;
     }
 
     if (quantidade > produto->quantidade) {
-        printf("Saída não registrada: quantidade solicitada excede o estoque.\n");
+        printf("Saida nao registrada: quantidade solicitada excede o estoque.\n");
         return;
     }
 
@@ -129,7 +128,7 @@ void registrar_saida(int produtoId, int quantidade, const char *motivo) {
 
     SaidaEstoqueNode *novo = malloc(sizeof(*novo));
     if (!novo) {
-        fprintf(stderr, "Falha ao alocar memória para saída de estoque.\n");
+        fprintf(stderr, "Falha ao alocar memoria para saida de estoque.\n");
         return;
     }
 
@@ -137,7 +136,7 @@ void registrar_saida(int produtoId, int quantidade, const char *motivo) {
     novo->next = NULL;
     inserir_saida(novo);
 
-    printf("Saída registrada: %d unidade(s) removidas do produto %s. Estoque atual: %d\n",
+    printf("Saida registrada: %d unidade(s) removidas do produto %s. Estoque atual: %d\n",
            quantidade,
            produto->nome,
            produto->quantidade);
