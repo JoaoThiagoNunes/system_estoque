@@ -105,10 +105,6 @@ Este projeto foi desenvolvido como trabalho da disciplina de **Programação Ava
 - Tratamento de entrada/saída
 - Sistema de testes automatizados
 
-## 👤 Autor
-
-Desenvolvido como trabalho acadêmico.
-
 ## 📄 Licença
 
 Projeto acadêmico - uso educacional.
