@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "../include/system.h"
 
 typedef struct VendaNode {
@@ -90,7 +91,7 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
            venda.total);
 }
 
-float calcular_total_vendas(void) {
+float calcular_valor_total_vendas(void) {
     float total = 0;
     VendaNode *atual = vendasHead;
     while (atual) {
@@ -98,5 +99,103 @@ float calcular_total_vendas(void) {
         atual = atual->next;
     }
     return total;
+}
+
+int calcular_quantidade_total_vendas(void) {
+    int quantidade = 0;
+    VendaNode *atual = vendasHead;
+    while (atual) {
+        quantidade += atual->value.quantidade;
+        atual = atual->next;
+    }
+    return quantidade;
+}
+
+float calcular_custo_total_vendas(void) {
+    float custo_total = 0;
+    VendaNode *atual = vendasHead;
+    while (atual) {
+        Produto *produto = produtos_buscar_por_id(atual->value.produtoId);
+        if (produto) {
+            custo_total += atual->value.quantidade * produto->precoCompra;
+        }
+        atual = atual->next;
+    }
+    return custo_total;
+}
+
+void gerar_relatorio_vendas(void) {
+    FILE *arquivo = fopen("relatorio_vendas.txt", "w");
+    if (!arquivo) {
+        fprintf(stderr, "Erro ao criar arquivo de relatorio.\n");
+        return;
+    }
+
+    time_t agora = time(NULL);
+    char *data_str = ctime(&agora);
+    if (data_str) {
+        data_str[strlen(data_str) - 1] = '\0';
+    }
+
+    fprintf(arquivo, "===================================\n    RELATORIO DE VENDAS\n");
+    fprintf(arquivo, "Data: %s\n\n", data_str ? data_str : "N/A");
+
+    float valor_investido = calcular_valor_investido();
+    float total_vendas = calcular_valor_total_vendas();
+    int quantidade_vendas = calcular_quantidade_total_vendas();
+    float lucro = total_vendas - valor_investido;
+
+    fprintf(arquivo, "RESUMO GERAL\n");
+    fprintf(arquivo, "-----------\n");
+    fprintf(arquivo, "Valor Investido: R$ %.2f\n", valor_investido);
+    fprintf(arquivo, "Total de Vendas: R$ %.2f\n", total_vendas);
+    fprintf(arquivo, "Quantidade de Vendas: %d unidades\n", quantidade_vendas);
+    fprintf(arquivo, "Lucro: R$ %.2f\n\n", lucro);
+
+    fprintf(arquivo, "DETALHES DAS VENDAS\n");
+    fprintf(arquivo, "-------------------\n");
+    
+    if (!vendasHead) {
+        fprintf(arquivo, "Nenhuma venda registrada.\n");
+    } else {
+        fprintf(arquivo, "%-4s | %-30s | %-30s | %-30s | %-10s | %-12s | %s\n",
+                "ID", "Produto", "Cliente", "Funcionario", "Quantidade", "Total", "Data");
+        fprintf(arquivo, "-----|--------------------------------|--------------------------------|--------------------------------|------------|--------------|-------------------\n");
+
+        VendaNode *atual = vendasHead;
+        while (atual) {
+            const Venda *v = &atual->value;
+            
+            Produto *produto = produtos_buscar_por_id(v->produtoId);
+            const Cliente *cliente = clientes_buscar_por_id(v->clienteId);
+            const Funcionario *funcionario = funcionarios_buscar_por_id(v->funcionarioId);
+            
+            const char *nome_produto = produto ? produto->nome : "N/A";
+            const char *nome_cliente = cliente ? cliente->nome : "N/A";
+            const char *nome_funcionario = funcionario ? funcionario->nome : "N/A";
+            
+            char data_formatada[30];
+            struct tm *info = localtime(&v->dataVenda);
+            if (info) {
+                strftime(data_formatada, sizeof(data_formatada), "%d/%m/%Y %H:%M:%S", info);
+            } else {
+                strcpy(data_formatada, "N/A");
+            }
+            
+            fprintf(arquivo, "%-4d | %-30s | %-30s | %-30s | %-10d | R$ %9.2f | %s\n",
+                    v->id,
+                    nome_produto,
+                    nome_cliente,
+                    nome_funcionario,
+                    v->quantidade,
+                    v->total,
+                    data_formatada);
+            
+            atual = atual->next;
+        }
+    }
+
+    fclose(arquivo);
+    printf("Relatorio salvo em: relatorio_vendas.txt\n");
 }
 

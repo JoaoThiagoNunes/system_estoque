@@ -1,0 +1,17 @@
+===================================
+    RELATORIO DE VENDAS
+Data: Tue Nov 18 16:46:06 2025
+
+RESUMO GERAL
+-----------
+Valor Investido: R$ 251.00
+Total de Vendas: R$ 195.30
+Quantidade de Vendas: 30 unidades
+Lucro: R$ -55.70
+
+DETALHES DAS VENDAS
+-------------------
+ID   | Produto                        | Cliente                        | Funcionario                    | Quantidade | Total        | Data
+-----|--------------------------------|--------------------------------|--------------------------------|------------|--------------|-------------------
+2    | caneta bic                     | jt                             | jt                             | 29         | R$    194.30 | 18/11/2025 16:46:03
+1    | 1                              | jt                             | jt                             | 1          | R$      1.00 | 18/11/2025 16:45:45

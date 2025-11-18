@@ -142,3 +142,37 @@ void registrar_saida(int produtoId, int quantidade, const char *motivo) {
            produto->quantidade);
 }
 
+float calcular_valor_investido_por_entradas(void) {
+    /* Calcula o valor investido baseado nas entradas de estoque registradas.
+       Isso é mais preciso pois considera todas as compras feitas,
+       não apenas o estoque atual. */
+    float valor_investido = 0;
+    
+    EntradaEstoqueNode *atual = entradasHead;
+    while (atual) {
+        Produto *produto = produtos_buscar_por_id(atual->value.produtoId);
+        if (produto) {
+            /* Valor investido = quantidade da entrada × preço de compra do produto */
+            valor_investido += atual->value.quantidade * produto->precoCompra;
+        }
+        atual = atual->next;
+    }
+    
+    return valor_investido;
+}
+
+float calcular_custo_total_saidas(void) {
+    float custo_total = 0;
+    
+    SaidaEstoqueNode *atual = saidasHead;
+    while (atual) {
+        Produto *produto = produtos_buscar_por_id(atual->value.produtoId);
+        if (produto) {
+            custo_total += atual->value.quantidade * produto->precoCompra;
+        }
+        atual = atual->next;
+    }
+    
+    return custo_total;
+}
+

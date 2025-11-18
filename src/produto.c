@@ -160,11 +160,14 @@ void listar_produtos(void) {
 }
 
 float calcular_valor_investido(void) {
-    float valor_investido = 0;
+    float valor_estoque_atual = 0;
     ProdutoNode *atual = produtosHead;
     while (atual) {
-        valor_investido += atual->value.precoCompra * atual->value.quantidade;
+        valor_estoque_atual += atual->value.precoCompra * atual->value.quantidade;
         atual = atual->next;
     }
-    return valor_investido;
+    float custo_vendas = calcular_custo_total_vendas();
+    float custo_saidas = calcular_custo_total_saidas();
+    
+    return valor_estoque_atual + custo_vendas + custo_saidas;
 }

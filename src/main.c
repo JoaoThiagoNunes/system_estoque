@@ -109,11 +109,9 @@ int main(void) {
                 break;
             }
             case 0:
-                printf("======================\nRelatorio Final\n");
-                printf("Valor investido: %.2f\n", calcular_valor_investido());
-                printf("Total de vendas: %.2f\n", calcular_total_vendas());
-                printf("Lucro: %.2f\n", calcular_total_vendas() - calcular_valor_investido());
-                printf("======================\n");
+                printf("=============================\nGerando Relatorio Final...\n");
+                gerar_relatorio_vendas();
+                printf("=============================\n");
                 break;
             default:
                 printf("Opção invalida.\n");

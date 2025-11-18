@@ -117,6 +117,8 @@ const Funcionario *funcionarios_buscar_por_id(int id);
 
 void estoque_inicializar(void);
 void estoque_finalizar(void);
+float calcular_valor_investido_por_entradas(void);
+float calcular_custo_total_saidas(void);
 
 void pedidos_inicializar(void);
 void pedidos_finalizar(void);
@@ -146,6 +148,8 @@ void registrar_saida(int produtoId, int quantidade, const char *motivo);
 void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quantidade);
 
 float calcular_valor_investido(void);
-float calcular_total_vendas(void);
+float calcular_valor_total_vendas(void);
+float calcular_custo_total_vendas(void);
+void gerar_relatorio_vendas(void);
 
 #endif 
