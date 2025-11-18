@@ -159,3 +159,12 @@ void listar_produtos(void) {
     }
 }
 
+float calcular_valor_investido(void) {
+    float valor_investido = 0;
+    ProdutoNode *atual = produtosHead;
+    while (atual) {
+        valor_investido += atual->value.precoCompra * atual->value.quantidade;
+        atual = atual->next;
+    }
+    return valor_investido;
+}

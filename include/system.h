@@ -145,4 +145,7 @@ void registrar_entrada(int produtoId, int quantidade);
 void registrar_saida(int produtoId, int quantidade, const char *motivo);
 void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quantidade);
 
+float calcular_valor_investido(void);
+float calcular_total_vendas(void);
+
 #endif 

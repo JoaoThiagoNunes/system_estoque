@@ -90,3 +90,13 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
            venda.total);
 }
 
+float calcular_total_vendas(void) {
+    float total = 0;
+    VendaNode *atual = vendasHead;
+    while (atual) {
+        total += atual->value.total;
+        atual = atual->next;
+    }
+    return total;
+}
+
