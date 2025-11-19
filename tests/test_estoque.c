@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "../include/system.h"
 #include "test_runner.h"
 
@@ -32,7 +30,7 @@ static void test_registrar_saida_produto_inexistente(void) {
     estoque_inicializar();
     produtos_inicializar();
     
-    registrar_saida(999, 10, "Teste");
+    registrar_saida(999, 10);
     
     Produto *prod = produtos_buscar_por_id(999);
     ASSERT_NULL(prod);
@@ -45,8 +43,8 @@ static void test_registrar_saida_quantidade_invalida(void) {
     estoque_inicializar();
     produtos_inicializar();
     
-    registrar_saida(1, 0, "Teste");
-    registrar_saida(1, -5, "Teste");
+    registrar_saida(1, 0);
+    registrar_saida(1, -5);
     
     produtos_finalizar();
     estoque_finalizar();
@@ -62,4 +60,3 @@ void rodar_testes_estoque(void) {
     
     estoque_finalizar();
 }
-

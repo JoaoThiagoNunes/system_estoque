@@ -4,7 +4,7 @@
 int tests_run = 0;
 int tests_passed = 0;
 int tests_failed = 0;
-const char *current_test_name = NULL;
+const char *current_test_name = "";
 
 void test_summary(void) {
     printf("\n=== Resumo dos Testes ===\n");

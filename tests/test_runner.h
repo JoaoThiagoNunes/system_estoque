@@ -1,13 +1,14 @@
 #ifndef TEST_RUNNER_H
 #define TEST_RUNNER_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 extern int tests_run;
 extern int tests_passed;
 extern int tests_failed;
-extern const char *current_test_name;
 
 #define ASSERT_EQ(a, b) \
     do { \
@@ -31,10 +32,9 @@ extern const char *current_test_name;
 
 #define ASSERT_FLOAT_EQ(a, b) \
     do { \
-        float diff = ((a) > (b)) ? ((a) - (b)) : ((b) - (a)); \
-        if (diff > 0.001f) { \
-            printf("  [FALHOU] %s:%d: Esperado %.2f, obtido %.2f\n", \
-                   __FILE__, __LINE__, (b), (a)); \
+        if (fabs((a) - (b)) > 0.001) { \
+            printf("  [FALHOU] %s:%d: Esperado %.3f, obtido %.3f\n", \
+                   __FILE__, __LINE__, (double)(b), (double)(a)); \
             tests_failed++; \
             return; \
         } \
@@ -89,6 +89,8 @@ extern const char *current_test_name;
             return; \
         } \
     } while (0)
+
+extern const char *current_test_name;
 
 #define RUN_TEST(test_func) \
     do { \
