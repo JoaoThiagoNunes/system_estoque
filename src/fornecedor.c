@@ -128,3 +128,25 @@ void listar_fornecedores(void) {
     }
 }
 
+void listar_fornecedores_limitado(int limite) {
+    printf("\n=== Fornecedores ===\n");
+    if (!fornecedoresHead) {
+        printf("Nenhum fornecedor cadastrado.\n");
+        return;
+    }
+
+    FornecedorNode *ponteiro = fornecedoresHead;
+    int contador = 0;
+    while (ponteiro && contador < limite) {
+        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
+        printf("ID: %d | Nome: %s | CNPJ: %s | Email: %s | %s\n",
+               ponteiro->value.id,
+               ponteiro->value.nome,
+               ponteiro->value.cnpj,
+               ponteiro->value.email,
+               status);
+        ponteiro = ponteiro->next;
+        contador++;
+    }
+}
+

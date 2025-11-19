@@ -184,6 +184,8 @@ void listar_produtos(void);
 void listar_clientes(void);
 void listar_fornecedores(void);
 void listar_funcionarios(void);
+void listar_fornecedores_limitado(int limite);
+void listar_clientes_limitado(int limite);
 
 void registrar_entrada(int produtoId, int quantidade);
 void registrar_saida(int produtoId, int quantidade);

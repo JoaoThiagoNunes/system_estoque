@@ -129,3 +129,25 @@ void listar_clientes(void) {
     }
 }
 
+void listar_clientes_limitado(int limite) {
+    printf("\n=== Clientes ===\n");
+    if (!clientesHead) {
+        printf("Nenhum cliente cadastrado.\n");
+        return;
+    }
+
+    ClienteNode *ponteiro = clientesHead;
+    int contador = 0;
+    while (ponteiro && contador < limite) {
+        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
+        printf("ID: %d | Nome: %s | CPF: %s | Email: %s | %s\n",
+               ponteiro->value.id,
+               ponteiro->value.nome,
+               ponteiro->value.cpf,
+               ponteiro->value.email,
+               status);
+        ponteiro = ponteiro->next;
+        contador++;
+    }
+}
+

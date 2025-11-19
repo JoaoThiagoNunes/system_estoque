@@ -1,16 +1,14 @@
 ===================================
     RELATORIO DE VENDAS
-Data: Wed Nov 19 12:19:36 2025
+Data: Wed Nov 19 12:58:29 2025
 
 RESUMO GERAL
 -----------
-Valor Investido: R$ 208.00
-Total de Vendas: R$ 10.00
-Quantidade de Vendas: 1 unidades
-Lucro: R$ -198.00
+Valor Investido: R$ 0.00
+Total de Vendas: R$ 0.00
+Quantidade de Vendas: 0 unidades
+Lucro: R$ 0.00
 
 DETALHES DAS VENDAS
 -------------------
-ID   | Produto                        | Cliente                        | Funcionario                    | Quantidade | Desconto     | Total        | Pagamento       | Data
------|--------------------------------|--------------------------------|--------------------------------|------------|--------------|--------------|-----------------|-------------------
-1    | lapis                          | jt                             | jt                             | 1          | R$      0.00 | R$     10.00 | credito         | 19/11/2025 12:19:31
+Nenhuma venda registrada.

@@ -22,6 +22,72 @@ static void mostrar_menu(void) {
     printf("Escolha: ");
 }
 
+static void submenu_listar_fornecedores(void) {
+    int opcao = -1;
+    
+    while (opcao != 0) {
+        printf("\n=== Listar Fornecedores ===\n");
+        printf("1 - Primeiros 5 fornecedores\n");
+        printf("2 - Todos os fornecedores\n");
+        printf("0 - Voltar ao menu principal\n");
+        printf("Escolha: ");
+        
+        if (scanf("%d", &opcao) != 1) {
+            fprintf(stderr, "Entrada invalida.\n");
+            limpar_buffer();
+            continue;
+        }
+        limpar_buffer();
+        
+        switch (opcao) {
+            case 1:
+                listar_fornecedores_limitado(5);
+                break;
+            case 2:
+                listar_fornecedores();
+                break;
+            case 0:
+                break;
+            default:
+                printf("Opcao invalida.\n");
+                break;
+        }
+    }
+}
+
+static void submenu_listar_clientes(void) {
+    int opcao = -1;
+    
+    while (opcao != 0) {
+        printf("\n=== Listar Clientes ===\n");
+        printf("1 - Primeiros 5 clientes\n");
+        printf("2 - Todos os clientes\n");
+        printf("0 - Voltar ao menu principal\n");
+        printf("Escolha: ");
+        
+        if (scanf("%d", &opcao) != 1) {
+            fprintf(stderr, "Entrada invalida.\n");
+            limpar_buffer();
+            continue;
+        }
+        limpar_buffer();
+        
+        switch (opcao) {
+            case 1:
+                listar_clientes_limitado(5);
+                break;
+            case 2:
+                listar_clientes();
+                break;
+            case 0:
+                break;
+            default:
+                printf("Opcao invalida.\n");
+                break;
+        }
+    }
+}
+
 int main(void) {
     int opcao = -1;
     inicializar_dados();
@@ -54,13 +120,13 @@ int main(void) {
                 listar_categorias();
                 break;
             case 7:
-                listar_fornecedores();
+                submenu_listar_fornecedores();
                 break;
             case 8:
                 listar_produtos();
                 break;
             case 9:
-                listar_clientes();
+                submenu_listar_clientes();
                 break;
             case 10:
                 listar_funcionarios();
@@ -110,7 +176,7 @@ int main(void) {
                 printf("=============================\n");
                 break;
             default:
-                printf("Opção invalida.\n");
+                printf("Opcao invalida.\n");
                 break;
         }
     }
