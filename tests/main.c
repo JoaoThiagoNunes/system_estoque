@@ -9,10 +9,6 @@ void rodar_testes_estoque(void);
 void rodar_testes_integracao(void);
 
 int main(void) {
-    printf("========================================\n");
-    printf("  Sistema de Testes - Sistema Estoque\n");
-    printf("========================================\n\n");
-    
     inicializar_dados();
     
     rodar_testes_categoria();
