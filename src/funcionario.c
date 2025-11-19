@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -58,9 +59,23 @@ const Funcionario *funcionarios_buscar_por_id(int id) {
 void cadastrar_funcionario(void) {
     Funcionario funcionario = {0};
     funcionario.id = proximoFuncionarioId++;
+    funcionario.dataAdmissao = time(NULL);
+    funcionario.ativo = 1;
 
     ler_texto("Nome do funcionario: ", funcionario.nome, sizeof(funcionario.nome));
     ler_texto("Cargo: ", funcionario.cargo, sizeof(funcionario.cargo));
+    ler_texto("Login: ", funcionario.login, sizeof(funcionario.login));
+    ler_texto("Senha: ", funcionario.senha, sizeof(funcionario.senha));
+    ler_texto("Email: ", funcionario.email, sizeof(funcionario.email));
+    ler_texto("CPF: ", funcionario.cpf, sizeof(funcionario.cpf));
+    ler_texto("Telefone: ", funcionario.telefone, sizeof(funcionario.telefone));
+    printf("Ativo (0=Inativo, 1=Ativo) [padrao: 1]: ");
+    if (scanf("%d", &funcionario.ativo) != 1) {
+        funcionario.ativo = 1;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
 
     FuncionarioNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -85,10 +100,13 @@ void listar_funcionarios(void) {
 
     FuncionarioNode *ponteiro = funcionariosHead;
     while (ponteiro) {
-        printf("ID: %d | Nome: %s | Cargo: %s\n",
+        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
+        printf("ID: %d | Nome: %s | Cargo: %s | Email: %s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
-               ponteiro->value.cargo);
+               ponteiro->value.cargo,
+               ponteiro->value.email,
+               status);
         ponteiro = ponteiro->next;
     }
 }

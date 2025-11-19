@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
 
@@ -62,13 +63,37 @@ const Cliente *clientes_buscar_por_id(int id) {
 void cadastrar_cliente(void) {
     Cliente cliente = {0};
     cliente.id = proximoClienteId++;
+    cliente.dataCadastro = time(NULL);
+    cliente.ativo = 1;
 
     ler_texto("Nome do cliente: ", cliente.nome, sizeof(cliente.nome));
     ler_texto("Telefone: ", cliente.telefone, sizeof(cliente.telefone));
-    ler_texto("Endereco: ", cliente.endereco.rua, sizeof(cliente.endereco.rua));
+    ler_texto("Email: ", cliente.email, sizeof(cliente.email));
+    ler_texto("CPF: ", cliente.cpf, sizeof(cliente.cpf));
+    ler_texto("Data de nascimento (DD/MM/AAAA): ", cliente.dataNascimento, sizeof(cliente.dataNascimento));
+    printf("Ativo (0=Inativo, 1=Ativo) [padrao: 1]: ");
+    if (scanf("%d", &cliente.ativo) != 1) {
+        cliente.ativo = 1;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
+    ler_texto("Endereco (rua): ", cliente.endereco.rua, sizeof(cliente.endereco.rua));
+    ler_texto("Numero: ", cliente.endereco.numero, sizeof(cliente.endereco.numero));
+    ler_texto("Complemento: ", cliente.endereco.complemento, sizeof(cliente.endereco.complemento));
+    ler_texto("Bairro: ", cliente.endereco.bairro, sizeof(cliente.endereco.bairro));
     ler_texto("Cidade: ", cliente.endereco.cidade, sizeof(cliente.endereco.cidade));
     ler_texto("Estado (UF): ", cliente.endereco.estado, sizeof(cliente.endereco.estado));
     ler_texto("CEP: ", cliente.endereco.cep, sizeof(cliente.endereco.cep));
+    ler_texto("Pais: ", cliente.endereco.pais, sizeof(cliente.endereco.pais));
+    ler_texto("Ponto de referencia: ", cliente.endereco.pontoReferencia, sizeof(cliente.endereco.pontoReferencia));
+    printf("Tipo de endereco (0=Residencial, 1=Comercial, 2=Outro): ");
+    if (scanf("%d", &cliente.endereco.tipoEndereco) != 1) {
+        cliente.endereco.tipoEndereco = 0;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
 
     ClienteNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -93,13 +118,13 @@ void listar_clientes(void) {
 
     ClienteNode *ponteiro = clientesHead;
     while (ponteiro) {
-        printf("ID: %d | Nome: %s | Telefone: %s | Cidade: %s | Estado: %s | CEP: %s\n",
+        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
+        printf("ID: %d | Nome: %s | CPF: %s | Email: %s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
-               ponteiro->value.telefone,
-               ponteiro->value.endereco.cidade,
-               ponteiro->value.endereco.estado,
-               ponteiro->value.endereco.cep);
+               ponteiro->value.cpf,
+               ponteiro->value.email,
+               status);
         ponteiro = ponteiro->next;
     }
 }

@@ -123,6 +123,9 @@ void cadastrar_produto(void) {
     }
     limpar_buffer();
 
+    ler_texto("Codigo de barras: ", produto.codigoBarras, sizeof(produto.codigoBarras));
+    ler_texto("Unidade de medida (kg, un, m, etc): ", produto.unidadeMedida, sizeof(produto.unidadeMedida));
+
     ProdutoNode *novo = malloc(sizeof(*novo));
     if (!novo) {
         fprintf(stderr, "Falha ao alocar memoria para produto.\n");
@@ -147,14 +150,14 @@ void listar_produtos(void) {
     ProdutoNode *ponteiro = produtosHead;
     while (ponteiro) {
         const Categoria *categoria = categorias_buscar_por_id(ponteiro->value.categoriaId);
-        const Fornecedor *fornecedor = fornecedores_buscar_por_id(ponteiro->value.fornecedorId);
-        printf("ID: %d | Nome: %s | Estoque: %d | Preco venda: %.2f | Categoria: %s | Fornecedor: %s\n",
+        printf("ID: %d | Codigo: %s | Nome: %s | Estoque: %d %s | Preco: R$ %.2f | Categoria: %s\n",
                ponteiro->value.id,
+               ponteiro->value.codigoBarras,
                ponteiro->value.nome,
                ponteiro->value.quantidade,
+               ponteiro->value.unidadeMedida,
                ponteiro->value.precoVenda,
-               categoria ? categoria->nome : "N/D",
-               fornecedor ? fornecedor->nome : "N/D");
+               categoria ? categoria->nome : "N/D");
         ponteiro = ponteiro->next;
     }
 }

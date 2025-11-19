@@ -78,17 +78,13 @@ int main(void) {
             }
             case 12: {
                 int id, qtd;
-                char motivo[60];
                 printf("ID do produto: ");
                 scanf("%d", &id);
                 limpar_buffer();
                 printf("Quantidade: ");
                 scanf("%d", &qtd);
                 limpar_buffer();
-                printf("Motivo: ");
-                scanf(" %59[^\n]", motivo);
-                limpar_buffer();
-                registrar_saida(id, qtd, motivo);
+                registrar_saida(id, qtd);
                 break;
             }
             case 13: {

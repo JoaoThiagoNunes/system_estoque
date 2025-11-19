@@ -67,15 +67,39 @@ void registrar_entrada(int produtoId, int quantidade) {
         return;
     }
 
+    printf("\n=== Dados da Entrada ===\n");
+    char numeroNotaFiscal[30];
+    ler_texto("Numero da nota fiscal: ", numeroNotaFiscal, sizeof(numeroNotaFiscal));
+    
+    printf("ID do funcionario responsavel: ");
+    int funcionarioId;
+    if (scanf("%d", &funcionarioId) != 1) {
+        funcionarioId = 0;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
+    
+    char observacoes[200];
+    ler_texto("Observacoes: ", observacoes, sizeof(observacoes));
+
     produto->quantidade += quantidade;
+
+    float valorTotal = quantidade * produto->precoCompra;
 
     EntradaEstoque entrada = {
         .id = proximaEntradaId++,
         .produtoId = produtoId,
         .quantidade = quantidade,
         .data = time(NULL),
-        .fornecedorId = produto->fornecedorId
+        .fornecedorId = produto->fornecedorId,
+        .valorTotal = valorTotal,
+        .funcionarioId = funcionarioId
     };
+    strncpy(entrada.numeroNotaFiscal, numeroNotaFiscal, sizeof(entrada.numeroNotaFiscal) - 1);
+    entrada.numeroNotaFiscal[sizeof(entrada.numeroNotaFiscal) - 1] = '\0';
+    strncpy(entrada.observacoes, observacoes, sizeof(entrada.observacoes) - 1);
+    entrada.observacoes[sizeof(entrada.observacoes) - 1] = '\0';
 
     EntradaEstoqueNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -93,7 +117,7 @@ void registrar_entrada(int produtoId, int quantidade) {
            produto->quantidade);
 }
 
-void registrar_saida(int produtoId, int quantidade, const char *motivo) {
+void registrar_saida(int produtoId, int quantidade) {
     if (quantidade <= 0) {
         printf("Quantidade invalida para saida.\n");
         return;
@@ -110,21 +134,43 @@ void registrar_saida(int produtoId, int quantidade, const char *motivo) {
         return;
     }
 
+    printf("\n=== Dados da Saida ===\n");
+    printf("ID do funcionario responsavel: ");
+    int funcionarioId;
+    if (scanf("%d", &funcionarioId) != 1) {
+        funcionarioId = 0;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
+    
+    printf("Tipo de saida (0=Perda, 1=Avaria, 2=Vencimento, 3=Outro): ");
+    int tipoSaida;
+    if (scanf("%d", &tipoSaida) != 1) {
+        tipoSaida = 3;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
+    
+    char observacoes[200];
+    ler_texto("Observacoes: ", observacoes, sizeof(observacoes));
+
     produto->quantidade -= quantidade;
+
+    float valorTotal = quantidade * produto->precoCompra;
 
     SaidaEstoque saida = {
         .id = proximaSaidaId++,
         .produtoId = produtoId,
         .quantidade = quantidade,
-        .data = time(NULL)
+        .data = time(NULL),
+        .funcionarioId = funcionarioId,
+        .valorTotal = valorTotal,
+        .tipoSaida = tipoSaida
     };
-
-    if (motivo) {
-        strncpy(saida.motivo, motivo, sizeof(saida.motivo) - 1);
-        saida.motivo[sizeof(saida.motivo) - 1] = '\0';
-    } else {
-        saida.motivo[0] = '\0';
-    }
+    strncpy(saida.observacoes, observacoes, sizeof(saida.observacoes) - 1);
+    saida.observacoes[sizeof(saida.observacoes) - 1] = '\0';
 
     SaidaEstoqueNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -143,16 +189,12 @@ void registrar_saida(int produtoId, int quantidade, const char *motivo) {
 }
 
 float calcular_valor_investido_por_entradas(void) {
-    /* Calcula o valor investido baseado nas entradas de estoque registradas.
-       Isso é mais preciso pois considera todas as compras feitas,
-       não apenas o estoque atual. */
     float valor_investido = 0;
     
     EntradaEstoqueNode *atual = entradasHead;
     while (atual) {
         Produto *produto = produtos_buscar_por_id(atual->value.produtoId);
         if (produto) {
-            /* Valor investido = quantidade da entrada × preço de compra do produto */
             valor_investido += atual->value.quantidade * produto->precoCompra;
         }
         atual = atual->next;

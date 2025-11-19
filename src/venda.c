@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include "../include/system.h"
+#include "../include/utils.h"
 
 typedef struct VendaNode {
     Venda value;
@@ -62,7 +63,27 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
         return;
     }
 
+    printf("\n=== Dados da Venda ===\n");
+    printf("Desconto (R$): ");
+    float desconto = 0.0f;
+    if (scanf("%f", &desconto) != 1) {
+        desconto = 0.0f;
+        limpar_buffer();
+    } else {
+        limpar_buffer();
+    }
+
+    char formaPagamento[20];
+    ler_texto("Forma de pagamento: ", formaPagamento, sizeof(formaPagamento));
+
+    char observacoes[200];
+    ler_texto("Observacoes: ", observacoes, sizeof(observacoes));
+
     produto->quantidade -= quantidade;
+
+    float subtotal = quantidade * produto->precoVenda;
+    float total = subtotal - desconto;
+    if (total < 0) total = 0;
 
     Venda venda = {
         .id = proximaVendaId++,
@@ -71,8 +92,13 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
         .produtoId = produtoId,
         .quantidade = quantidade,
         .dataVenda = time(NULL),
-        .total = quantidade * produto->precoVenda
+        .total = total,
+        .desconto = desconto
     };
+    strncpy(venda.formaPagamento, formaPagamento, sizeof(venda.formaPagamento) - 1);
+    venda.formaPagamento[sizeof(venda.formaPagamento) - 1] = '\0';
+    strncpy(venda.observacoes, observacoes, sizeof(venda.observacoes) - 1);
+    venda.observacoes[sizeof(venda.observacoes) - 1] = '\0';
 
     VendaNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -158,9 +184,9 @@ void gerar_relatorio_vendas(void) {
     if (!vendasHead) {
         fprintf(arquivo, "Nenhuma venda registrada.\n");
     } else {
-        fprintf(arquivo, "%-4s | %-30s | %-30s | %-30s | %-10s | %-12s | %s\n",
-                "ID", "Produto", "Cliente", "Funcionario", "Quantidade", "Total", "Data");
-        fprintf(arquivo, "-----|--------------------------------|--------------------------------|--------------------------------|------------|--------------|-------------------\n");
+        fprintf(arquivo, "%-4s | %-30s | %-30s | %-30s | %-10s | %-12s | %-12s | %-15s | %s\n",
+                "ID", "Produto", "Cliente", "Funcionario", "Quantidade", "Desconto", "Total", "Pagamento", "Data");
+        fprintf(arquivo, "-----|--------------------------------|--------------------------------|--------------------------------|------------|--------------|--------------|-----------------|-------------------\n");
 
         VendaNode *atual = vendasHead;
         while (atual) {
@@ -182,13 +208,15 @@ void gerar_relatorio_vendas(void) {
                 strcpy(data_formatada, "N/A");
             }
             
-            fprintf(arquivo, "%-4d | %-30s | %-30s | %-30s | %-10d | R$ %9.2f | %s\n",
+            fprintf(arquivo, "%-4d | %-30s | %-30s | %-30s | %-10d | R$ %9.2f | R$ %9.2f | %-15s | %s\n",
                     v->id,
                     nome_produto,
                     nome_cliente,
                     nome_funcionario,
                     v->quantidade,
+                    v->desconto,
                     v->total,
+                    v->formaPagamento,
                     data_formatada);
             
             atual = atual->next;
