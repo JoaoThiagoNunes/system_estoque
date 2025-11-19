@@ -4,6 +4,7 @@
 #include <string.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct VendaNode {
     Venda value;
@@ -35,7 +36,7 @@ void vendas_finalizar(void) {
 
 void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quantidade) {
     if (quantidade <= 0) {
-        printf("Quantidade invalida para venda.\n");
+        imprimir_erro("Quantidade invalida para venda.");
         return;
     }
 
@@ -44,22 +45,22 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
     const Funcionario *funcionario = funcionarios_buscar_por_id(funcionarioId);
 
     if (!produto) {
-        printf("Produto %d nao encontrado.\n", produtoId);
+        imprimir_erro("Produto %d nao encontrado.", produtoId);
         return;
     }
 
     if (!cliente) {
-        printf("Cliente %d nao encontrado.\n", clienteId);
+        imprimir_erro("Cliente %d nao encontrado.", clienteId);
         return;
     }
 
     if (!funcionario) {
-        printf("Funcionário %d nao encontrado.\n", funcionarioId);
+        imprimir_erro("Funcionario %d nao encontrado.", funcionarioId);
         return;
     }
 
     if (quantidade > produto->quantidade) {
-        printf("Venda nao registrada: estoque insuficiente.\n");
+        imprimir_erro("Venda nao registrada: estoque insuficiente.");
         return;
     }
 
@@ -109,12 +110,24 @@ void registrar_venda(int produtoId, int clienteId, int funcionarioId, int quanti
     novo->value = venda;
     novo->next = NULL;
     inserir_venda(novo);
-
-    printf("Venda registrada: %d unidade(s) de %s para %s. Total: R$ %.2f\n",
-           quantidade,
-           produto->nome,
-           cliente->nome,
-           venda.total);
+    
+    printf("\n");
+    desenhar_box_titulo("VENDA REGISTRADA COM SUCESSO", 60);
+    imprimir_sucesso("Venda concluida!");
+    printf("\n");
+    printf("Produto: %s\n", produto->nome);
+    printf("Cliente: %s\n", cliente->nome);
+    printf("Funcionario: %s\n", funcionario->nome);
+    printf("Quantidade: %d %s\n", quantidade, produto->unidadeMedida);
+    printf("Preco unitario: R$ %.2f\n", produto->precoVenda);
+    printf("Subtotal: R$ %.2f\n", subtotal);
+    if (desconto > 0) {
+        printf("Desconto: R$ %.2f\n", desconto);
+    }
+    printf("Total: R$ %.2f\n", venda.total);
+    printf("Forma de pagamento: %s\n", formaPagamento);
+    desenhar_box_fim(60);
+    pausar_para_continuar();
 }
 
 float calcular_valor_total_vendas(void) {

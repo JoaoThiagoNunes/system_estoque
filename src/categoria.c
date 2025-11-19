@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct CategoriaNode {
     Categoria value;
@@ -72,12 +74,8 @@ void cadastrar_categoria(void) {
     ler_texto("Codigo: ", categoria.codigo, sizeof(categoria.codigo));
     ler_texto("Tags (separadas por virgula): ", categoria.tags, sizeof(categoria.tags));
     printf("Ativo (0=Inativo, 1=Ativo) [padrao: 1]: ");
-    if (scanf("%d", &categoria.ativo) != 1) {
-        categoria.ativo = 1;
-        limpar_buffer();
-    } else {
-        limpar_buffer();
-    }
+    if (scanf("%d", &categoria.ativo) != 1) categoria.ativo = 1;
+    limpar_buffer();
 
     CategoriaNode *novo = malloc(sizeof(*novo));
     if (!novo) {
@@ -90,20 +88,37 @@ void cadastrar_categoria(void) {
 
     inserir_categoria(novo);
 
-    printf("Categoria cadastrada com ID %d.\n", categoria.id);
+    printf("\n");
+    desenhar_box_titulo("CADASTRO REALIZADO COM SUCESSO", 50);
+    imprimir_sucesso("Categoria cadastrada!");
+    printf("\nID: %d\n", categoria.id);
+    printf("Nome: %s\n", categoria.nome);
+    printf("Codigo: %s\n", categoria.codigo);
+    printf("Status: %s\n", categoria.ativo ? ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET);
+    if (strlen(categoria.tags) > 0) printf("Tags: %s\n", categoria.tags);
+    desenhar_box_fim(50);
+    pausar_para_continuar();
 }
 
 void listar_categorias(void) {
-    printf("\n=== Categorias ===\n");
+    limpar_tela();
+    imprimir_titulo("CATEGORIAS");
     if (!categoriasHead) {
-        printf("Nenhuma categoria cadastrada.\n");
+        imprimir_info("Nenhuma categoria cadastrada.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
-
+    desenhar_box_titulo("LISTA DE CATEGORIAS", 80);
+    printf(ANSI_BOLD "%-4s | %-10s | %-25s | %-8s | %-30s\n" ANSI_RESET,
+           "ID", "Codigo", "Nome", "Status", "Tags");
+    desenhar_separador(78);
     CategoriaNode *ponteiro = categoriasHead;
     while (ponteiro) {
-        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
-        printf("ID: %d | Codigo: %s | Nome: %s | %s | Tags: %s\n",
+        const char *status = ponteiro->value.ativo ?
+            ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET;
+        printf("%-4d | %-10s | %-25s | %s | %-30s\n",
                ponteiro->value.id,
                ponteiro->value.codigo,
                ponteiro->value.nome,
@@ -111,5 +126,8 @@ void listar_categorias(void) {
                ponteiro->value.tags);
         ponteiro = ponteiro->next;
     }
+    desenhar_box_fim(80);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
-

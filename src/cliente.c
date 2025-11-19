@@ -3,6 +3,7 @@
 #include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct ClienteNode {
     Cliente value;
@@ -106,20 +107,42 @@ void cadastrar_cliente(void) {
 
     inserir_cliente(novo);
 
-    printf("Cliente cadastrado com ID %d.\n", cliente.id);
+    printf("\n");
+    desenhar_box_titulo("CADASTRO REALIZADO COM SUCESSO", 50);
+    imprimir_sucesso("Cliente cadastrado!");
+    printf("\n");
+    printf("ID: %d\n", cliente.id);
+    printf("Nome: %s\n", cliente.nome);
+    printf("CPF: %s\n", cliente.cpf);
+    printf("Email: %s\n", cliente.email);
+    printf("Telefone: %s\n", cliente.telefone);
+    printf("Status: %s\n", cliente.ativo ? ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET);
+    desenhar_box_fim(50);
+    pausar_para_continuar();
 }
 
 void listar_clientes(void) {
-    printf("\n=== Clientes ===\n");
+    limpar_tela();
+    imprimir_titulo("CLIENTES");
+    
     if (!clientesHead) {
-        printf("Nenhum cliente cadastrado.\n");
+        imprimir_info("Nenhum cliente cadastrado.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
 
+    desenhar_box_titulo("LISTA DE CLIENTES", 90);
+    printf(ANSI_BOLD "%-4s | %-30s | %-14s | %-30s | %-8s\n" ANSI_RESET,
+           "ID", "Nome", "CPF", "Email", "Status");
+    desenhar_separador(88);
+    
     ClienteNode *ponteiro = clientesHead;
     while (ponteiro) {
-        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
-        printf("ID: %d | Nome: %s | CPF: %s | Email: %s | %s\n",
+        const char *status = ponteiro->value.ativo ? 
+            ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET;
+        printf("%-4d | %-30s | %-14s | %-30s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.cpf,
@@ -127,20 +150,36 @@ void listar_clientes(void) {
                status);
         ponteiro = ponteiro->next;
     }
+    
+    desenhar_box_fim(90);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
 
 void listar_clientes_limitado(int limite) {
-    printf("\n=== Clientes ===\n");
+    limpar_tela();
+    imprimir_titulo("CLIENTES (PRIMEIROS 5)");
+    
     if (!clientesHead) {
-        printf("Nenhum cliente cadastrado.\n");
+        imprimir_info("Nenhum cliente cadastrado.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
 
+    desenhar_box_titulo("LISTA DE CLIENTES", 90);
+    printf(ANSI_BOLD "%-4s | %-30s | %-14s | %-30s | %-8s\n" ANSI_RESET,
+           "ID", "Nome", "CPF", "Email", "Status");
+    desenhar_separador(88);
+    
     ClienteNode *ponteiro = clientesHead;
     int contador = 0;
     while (ponteiro && contador < limite) {
-        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
-        printf("ID: %d | Nome: %s | CPF: %s | Email: %s | %s\n",
+        const char *status = ponteiro->value.ativo ? 
+            ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET;
+        printf("%-4d | %-30s | %-14s | %-30s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.cpf,
@@ -149,5 +188,10 @@ void listar_clientes_limitado(int limite) {
         ponteiro = ponteiro->next;
         contador++;
     }
+    
+    desenhar_box_fim(90);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
 

@@ -1,13 +1,13 @@
 ===================================
     RELATORIO DE VENDAS
-Data: Wed Nov 19 12:58:29 2025
+Data: Wed Nov 19 16:07:55 2025
 
 RESUMO GERAL
 -----------
-Valor Investido: R$ 0.00
+Valor Investido: R$ 1.00
 Total de Vendas: R$ 0.00
 Quantidade de Vendas: 0 unidades
-Lucro: R$ 0.00
+Lucro: R$ -1.00
 
 DETALHES DAS VENDAS
 -------------------

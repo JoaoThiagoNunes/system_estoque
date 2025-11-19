@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct ProdutoNode {
     Produto value;
@@ -137,29 +138,59 @@ void cadastrar_produto(void) {
 
     inserir_produto(novo);
 
-    printf("Produto cadastrado com ID %d.\n", produto.id);
+    const Categoria *categoria = categorias_buscar_por_id(produto.categoriaId);
+    printf("\n");
+    desenhar_box_titulo("CADASTRO REALIZADO COM SUCESSO", 60);
+    imprimir_sucesso("Produto cadastrado!");
+    printf("\n");
+    printf("ID: %d\n", produto.id);
+    printf("Nome: %s\n", produto.nome);
+    printf("Codigo de Barras: %s\n", produto.codigoBarras);
+    printf("Categoria: %s\n", categoria ? categoria->nome : "N/D");
+    printf("Unidade de Medida: %s\n", produto.unidadeMedida);
+    printf("Quantidade: %d %s\n", produto.quantidade, produto.unidadeMedida);
+    printf("Preco de Compra: R$ %.2f\n", produto.precoCompra);
+    printf("Preco de Venda: R$ %.2f\n", produto.precoVenda);
+    desenhar_box_fim(60);
+    pausar_para_continuar();
 }
 
 void listar_produtos(void) {
-    printf("\n=== Produtos ===\n");
+    limpar_tela();
+    imprimir_titulo("PRODUTOS");
+    
     if (!produtosHead) {
-        printf("Nenhum produto cadastrado.\n");
+        imprimir_info("Nenhum produto cadastrado.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
 
+    desenhar_box_titulo("LISTA DE PRODUTOS", 100);
+    printf(ANSI_BOLD "%-4s | %-15s | %-25s | %-12s | %-10s | %-10s | %-15s\n" ANSI_RESET,
+           "ID", "Cod. Barras", "Nome", "Estoque", "Preco Compra", "Preco Venda", "Categoria");
+    desenhar_separador(98);
+    
     ProdutoNode *ponteiro = produtosHead;
     while (ponteiro) {
         const Categoria *categoria = categorias_buscar_por_id(ponteiro->value.categoriaId);
-        printf("ID: %d | Codigo: %s | Nome: %s | Estoque: %d %s | Preco: R$ %.2f | Categoria: %s\n",
+        printf("%-4d | %-15s | %-25s | %-3d %-8s | R$ %6.2f | R$ %6.2f | %-15s\n",
                ponteiro->value.id,
                ponteiro->value.codigoBarras,
                ponteiro->value.nome,
                ponteiro->value.quantidade,
                ponteiro->value.unidadeMedida,
+               ponteiro->value.precoCompra,
                ponteiro->value.precoVenda,
                categoria ? categoria->nome : "N/D");
         ponteiro = ponteiro->next;
     }
+    
+    desenhar_box_fim(100);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
 
 float calcular_valor_investido(void) {

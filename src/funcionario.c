@@ -3,6 +3,7 @@
 #include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct FuncionarioNode {
     Funcionario value;
@@ -88,20 +89,42 @@ void cadastrar_funcionario(void) {
 
     inserir_funcionario(novo);
 
-    printf("Funcionario cadastrado com ID %d.\n", funcionario.id);
+    printf("\n");
+    desenhar_box_titulo("CADASTRO REALIZADO COM SUCESSO", 50);
+    imprimir_sucesso("Funcionario cadastrado!");
+    printf("\n");
+    printf("ID: %d\n", funcionario.id);
+    printf("Nome: %s\n", funcionario.nome);
+    printf("Cargo: %s\n", funcionario.cargo);
+    printf("Email: %s\n", funcionario.email);
+    printf("Login: %s\n", funcionario.login);
+    printf("Status: %s\n", funcionario.ativo ? ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET);
+    desenhar_box_fim(50);
+    pausar_para_continuar();
 }
 
 void listar_funcionarios(void) {
-    printf("\n=== Funcionarios ===\n");
+    limpar_tela();
+    imprimir_titulo("FUNCIONARIOS");
+    
     if (!funcionariosHead) {
-        printf("Nenhum funcionario cadastrado.\n");
+        imprimir_info("Nenhum funcionario cadastrado.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
 
+    desenhar_box_titulo("LISTA DE FUNCIONARIOS", 90);
+    printf(ANSI_BOLD "%-4s | %-30s | %-20s | %-30s | %-8s\n" ANSI_RESET,
+           "ID", "Nome", "Cargo", "Email", "Status");
+    desenhar_separador(88);
+    
     FuncionarioNode *ponteiro = funcionariosHead;
     while (ponteiro) {
-        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
-        printf("ID: %d | Nome: %s | Cargo: %s | Email: %s | %s\n",
+        const char *status = ponteiro->value.ativo ? 
+            ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET;
+        printf("%-4d | %-30s | %-20s | %-30s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.cargo,
@@ -109,5 +132,10 @@ void listar_funcionarios(void) {
                status);
         ponteiro = ponteiro->next;
     }
+    
+    desenhar_box_fim(90);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
 

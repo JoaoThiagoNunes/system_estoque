@@ -4,6 +4,7 @@
 #include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct PedidoCompraNode {
     PedidoCompra value;
@@ -142,6 +143,28 @@ void cadastrar_pedido(void) {
     novo->next = NULL;
     inserir_pedido(novo);
 
-    printf("Pedido cadastrado com ID %d. Valor total: R$ %.2f\n", pedido.id, pedido.valorTotal);
+    Produto *produto = produtos_buscar_por_id(pedido.produtoId);
+    const Fornecedor *fornecedor = fornecedores_buscar_por_id(pedido.fornecedorId);
+    const char *status_str = pedido.status == 0 ? "Pendente" : 
+                            pedido.status == 1 ? "Confirmado" : 
+                            pedido.status == 2 ? "Entregue" : "Cancelado";
+    
+    printf("\n");
+    desenhar_box_titulo("PEDIDO CADASTRADO COM SUCESSO", 60);
+    imprimir_sucesso("Pedido de compra registrado!");
+    printf("\n");
+    printf("ID: %d\n", pedido.id);
+    if (fornecedor) {
+        printf("Fornecedor: %s\n", fornecedor->nome);
+    }
+    if (produto) {
+        printf("Produto: %s\n", produto->nome);
+    }
+    printf("Quantidade: %d\n", pedido.quantidade);
+    printf("Preco unitario: R$ %.2f\n", pedido.precoUnitario);
+    printf("Valor total: R$ %.2f\n", pedido.valorTotal);
+    printf("Status: %s\n", status_str);
+    desenhar_box_fim(60);
+    pausar_para_continuar();
 }
 

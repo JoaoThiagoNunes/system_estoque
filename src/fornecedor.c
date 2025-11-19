@@ -3,6 +3,7 @@
 #include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct FornecedorNode {
     Fornecedor value;
@@ -105,20 +106,42 @@ void cadastrar_fornecedor(void) {
 
     inserir_fornecedor(novo);
 
-    printf("Fornecedor cadastrado com ID %d.\n", fornecedor.id);
+    printf("\n");
+    desenhar_box_titulo("CADASTRO REALIZADO COM SUCESSO", 50);
+    imprimir_sucesso("Fornecedor cadastrado!");
+    printf("\n");
+    printf("ID: %d\n", fornecedor.id);
+    printf("Nome: %s\n", fornecedor.nome);
+    printf("CNPJ: %s\n", fornecedor.cnpj);
+    printf("Email: %s\n", fornecedor.email);
+    printf("Telefone: %s\n", fornecedor.telefone);
+    printf("Status: %s\n", fornecedor.ativo ? ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET);
+    desenhar_box_fim(50);
+    pausar_para_continuar();
 }
 
 void listar_fornecedores(void) {
-    printf("\n=== Fornecedores ===\n");
+    limpar_tela();
+    imprimir_titulo("FORNECEDORES");
+    
     if (!fornecedoresHead) {
-        printf("Nenhum fornecedor cadastrado.\n");
+        imprimir_info("Nenhum fornecedor cadastrado.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
 
+    desenhar_box_titulo("LISTA DE FORNECEDORES", 90);
+    printf(ANSI_BOLD "%-4s | %-30s | %-18s | %-30s | %-8s\n" ANSI_RESET,
+           "ID", "Nome", "CNPJ", "Email", "Status");
+    desenhar_separador(88);
+    
     FornecedorNode *ponteiro = fornecedoresHead;
     while (ponteiro) {
-        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
-        printf("ID: %d | Nome: %s | CNPJ: %s | Email: %s | %s\n",
+        const char *status = ponteiro->value.ativo ? 
+            ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET;
+        printf("%-4d | %-30s | %-18s | %-30s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.cnpj,
@@ -126,20 +149,36 @@ void listar_fornecedores(void) {
                status);
         ponteiro = ponteiro->next;
     }
+    
+    desenhar_box_fim(90);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
 
 void listar_fornecedores_limitado(int limite) {
-    printf("\n=== Fornecedores ===\n");
+    limpar_tela();
+    imprimir_titulo("FORNECEDORES (PRIMEIROS 5)");
+    
     if (!fornecedoresHead) {
-        printf("Nenhum fornecedor cadastrado.\n");
+        imprimir_info("Nenhum fornecedor cadastrado.");
+        printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+        limpar_buffer();
+        getchar();
         return;
     }
 
+    desenhar_box_titulo("LISTA DE FORNECEDORES", 90);
+    printf(ANSI_BOLD "%-4s | %-30s | %-18s | %-30s | %-8s\n" ANSI_RESET,
+           "ID", "Nome", "CNPJ", "Email", "Status");
+    desenhar_separador(88);
+    
     FornecedorNode *ponteiro = fornecedoresHead;
     int contador = 0;
     while (ponteiro && contador < limite) {
-        const char *status = ponteiro->value.ativo ? "Ativo" : "Inativo";
-        printf("ID: %d | Nome: %s | CNPJ: %s | Email: %s | %s\n",
+        const char *status = ponteiro->value.ativo ? 
+            ANSI_GREEN "Ativo" ANSI_RESET : ANSI_RED "Inativo" ANSI_RESET;
+        printf("%-4d | %-30s | %-18s | %-30s | %s\n",
                ponteiro->value.id,
                ponteiro->value.nome,
                ponteiro->value.cnpj,
@@ -148,5 +187,10 @@ void listar_fornecedores_limitado(int limite) {
         ponteiro = ponteiro->next;
         contador++;
     }
+    
+    desenhar_box_fim(90);
+    printf("\n" ANSI_YELLOW "Pressione Enter para continuar..." ANSI_RESET);
+    limpar_buffer();
+    getchar();
 }
 

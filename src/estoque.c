@@ -4,6 +4,7 @@
 #include <time.h>
 #include "../include/system.h"
 #include "../include/utils.h"
+#include "../include/ui.h"
 
 typedef struct EntradaEstoqueNode {
     EntradaEstoque value;
@@ -57,13 +58,13 @@ void estoque_finalizar(void) {
 
 void registrar_entrada(int produtoId, int quantidade) {
     if (quantidade <= 0) {
-        printf("Quantidade invalida para entrada.\n");
+        imprimir_erro("Quantidade invalida para entrada.");
         return;
     }
 
     Produto *produto = produtos_buscar_por_id(produtoId);
     if (!produto) {
-        printf("Produto %d nao encontrado. Cadastre o produto primeiro.\n", produtoId);
+        imprimir_erro("Produto %d nao encontrado. Cadastre o produto primeiro.", produtoId);
         return;
     }
 
@@ -111,26 +112,38 @@ void registrar_entrada(int produtoId, int quantidade) {
     novo->next = NULL;
     inserir_entrada(novo);
 
-    printf("Entrada registrada: %d unidade(s) adicionadas ao produto %s. Estoque atual: %d\n",
-           quantidade,
-           produto->nome,
-           produto->quantidade);
+    int estoque_anterior = produto->quantidade - quantidade;
+    
+    printf("\n");
+    desenhar_box_titulo("ENTRADA REGISTRADA COM SUCESSO", 60);
+    imprimir_sucesso("Entrada de estoque registrada!");
+    printf("\n");
+    printf("Produto: %s\n", produto->nome);
+    printf("Quantidade adicionada: %d %s\n", quantidade, produto->unidadeMedida);
+    printf("Estoque anterior: %d %s\n", estoque_anterior, produto->unidadeMedida);
+    printf("Estoque atual: %d %s\n", produto->quantidade, produto->unidadeMedida);
+    printf("Valor total: R$ %.2f\n", valorTotal);
+    if (strlen(numeroNotaFiscal) > 0) {
+        printf("Nota Fiscal: %s\n", numeroNotaFiscal);
+    }
+    desenhar_box_fim(60);
+    pausar_para_continuar();
 }
 
 void registrar_saida(int produtoId, int quantidade) {
     if (quantidade <= 0) {
-        printf("Quantidade invalida para saida.\n");
+        imprimir_erro("Quantidade invalida para saida.");
         return;
     }
 
     Produto *produto = produtos_buscar_por_id(produtoId);
     if (!produto) {
-        printf("Produto %d nao encontrado.\n", produtoId);
+        imprimir_erro("Produto %d nao encontrado.", produtoId);
         return;
     }
 
     if (quantidade > produto->quantidade) {
-        printf("Saida nao registrada: quantidade solicitada excede o estoque.\n");
+        imprimir_erro("Saida nao registrada: quantidade solicitada excede o estoque.");
         return;
     }
 
@@ -182,10 +195,28 @@ void registrar_saida(int produtoId, int quantidade) {
     novo->next = NULL;
     inserir_saida(novo);
 
-    printf("Saida registrada: %d unidade(s) removidas do produto %s. Estoque atual: %d\n",
-           quantidade,
-           produto->nome,
-           produto->quantidade);
+    int estoque_anterior = produto->quantidade + quantidade;
+    const char *tipo_saida_str;
+    switch (tipoSaida) {
+        case 0: tipo_saida_str = "Perda"; break;
+        case 1: tipo_saida_str = "Avaria"; break;
+        case 2: tipo_saida_str = "Vencimento"; break;
+        case 3: tipo_saida_str = "Outro"; break;
+        default: tipo_saida_str = "Desconhecido"; break;
+    }
+    
+    printf("\n");
+    desenhar_box_titulo("SAIDA REGISTRADA COM SUCESSO", 60);
+    imprimir_sucesso("Saida de estoque registrada!");
+    printf("\n");
+    printf("Produto: %s\n", produto->nome);
+    printf("Quantidade removida: %d %s\n", quantidade, produto->unidadeMedida);
+    printf("Tipo de saida: %s\n", tipo_saida_str);
+    printf("Estoque anterior: %d %s\n", estoque_anterior, produto->unidadeMedida);
+    printf("Estoque atual: %d %s\n", produto->quantidade, produto->unidadeMedida);
+    printf("Valor total: R$ %.2f\n", valorTotal);
+    desenhar_box_fim(60);
+    pausar_para_continuar();
 }
 
 float calcular_valor_investido_por_entradas(void) {
